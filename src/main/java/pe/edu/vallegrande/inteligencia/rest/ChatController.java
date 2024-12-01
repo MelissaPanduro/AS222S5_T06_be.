@@ -70,6 +70,4 @@ public ResponseEntity<ChatResponseModel> updateChatResponse(@PathVariable Long i
     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 }
 
-
-
 }
