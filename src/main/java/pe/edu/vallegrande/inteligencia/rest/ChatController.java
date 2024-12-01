@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/chatbot")
+@CrossOrigin(origins = "https://ubiquitous-fishstick-56ww5qww9x425jq-4200.app.github.dev") //cambiar url del front
 public class ChatController {
 
     private final ChatbotResponseService chatbotResponseService;
