@@ -12,11 +12,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-
 @RequestMapping("/api/chatbot")
-
-@CrossOrigin(origins = "https://potential-trout-g9gg6qggj5jcppv4-4200.app.github.dev") //cambiar url del front
-
 public class ChatController {
 
     private final ChatbotResponseService chatbotResponseService;
@@ -49,25 +45,28 @@ public class ChatController {
     }
 
     // Método para eliminar una respuesta
-    @DeleteMapping("responses/{id}")
-public Mono<Void> deleteQuery(@PathVariable Long id) {
-    return chatInteractionRepository.deleteById(id)
-        .switchIfEmpty(Mono.error(new RuntimeException("Consulta no encontrada")));
-}
-
+    @DeleteMapping("/responses/{id}")
+    public Mono<ResponseEntity<Void>> deleteResponse(@PathVariable Long id) {
+        return chatbotResponseService.deleteResponseById(id)
+            .map(isDeleted -> {
+                if (isDeleted) {
+                    return ResponseEntity.noContent().build(); // 204 No Content
+                } else {
+                    return ResponseEntity.notFound().build(); // 404 Not Found
+                }
+            });
+    }
 
     @PutMapping("/responses/{id}")
-public ResponseEntity<ChatResponseModel> updateChatResponse(@PathVariable Long id, @RequestBody ChatResponseModel updatedResponse) {
-    Optional<ChatResponseModel> existingResponse = chatResponseRepository.findById(id);
-    if (existingResponse.isPresent()) {
-        ChatResponseModel response = existingResponse.get();
-        response.setQuery(updatedResponse.getQuery());
-        response.setResponse(updatedResponse.getResponse());
-        response.setCreatedAt(updatedResponse.getCreatedAt()); // Si necesitas actualizar la fecha
-        chatResponseRepository.save(response);
-        return ResponseEntity.ok(response);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+public Mono<ResponseEntity<ChatResponseModel>> editResponse(
+        @PathVariable Long id,
+        @RequestBody String newQuery) {
+    return chatbotResponseService.editResponse(id, newQuery)
+        .map(updatedResponse -> ResponseEntity.ok(updatedResponse))
+        .defaultIfEmpty(ResponseEntity.notFound().build());
 }
 
+   
+    
 }
+
