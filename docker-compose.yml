@@ -5,8 +5,7 @@ services:
     image: melissapanduro/chatbot_docker
     ports:
       - "8085:8085"
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
+    services:
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       API_KEY: ${API_KEY}
@@ -15,4 +14,4 @@ services:
     ports:
       - "4200:4200"
     environment:
-      API_BACKEND: '${API_BACKEND}'
+      API_BACKEND: ${API_BACKEND}
