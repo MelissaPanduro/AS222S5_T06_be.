@@ -15,4 +15,4 @@ services:
     ports:
       - "4200:4200"
     environment:
-      API_BACKEND: '${API_BACKEND}'
+      API_BACKEND: ${API_BACKEND}
